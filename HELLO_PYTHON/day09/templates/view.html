@@ -5,6 +5,24 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Hello View
+	Hello View<br>
+	{{a}}<br>
+	{% for e in b %}
+		{{e}} 
+    {% endfor %}<br>
+    <table border="1px">
+    	<tr>
+    		<td>col01</td>
+    		<td>col02</td>
+    		<td>col03</td>
+    	</tr>
+      {% for e in c %}
+      <tr>
+	      <td><a href="emp_detail?e_id={{e.e_id}}"> {{e.col01}} </a></td>
+	      <td> {{e.col02}} </td>
+	      <td> {{e.col03}} </td>
+      </tr>
+      {% endfor %}
+    </table>
 </body>
 </html>

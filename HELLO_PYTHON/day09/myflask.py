@@ -3,6 +3,7 @@ from flask.globals import request
 import psycopg2
 from day09.dao_sample import DaoSample
 from flask import Flask, render_template
+from nacl.exceptions import ensure
 
 connection = psycopg2.connect(database="python", user="postgres", password="python")
 cursor = connection.cursor()
@@ -30,14 +31,14 @@ def sample():
     return str(list)
 
 @app.route('/view')
-def view(a):
+def view():
     a = "홍길동"
     b = ["바보","천재","미남"]
     c = [
             {'col01':'1','col02':'1','col03':'1'},
             {'col01':'2','col02':'2','col03':'2'}
         ]
-    return render_template('view.html')
+    return render_template('view.html',a=a,b=b,c=c)
 
 if __name__ == '__main__':
     app.run(debug=True)
