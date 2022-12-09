@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+function fn_list(){
+	axios.post('/ajax_teacher_list', {
+		t_id: '1',
+		t_name: '2'
+	})
+	.then(function (res) {
+		console.log(res.data.list);
+		var list = res.data.list;
+		var html = "";
+		
+		for(var i=0; i < list.length;i++){
+			var t = list[i];
+			html += `
+			<tr>
+			<td><a href="javascript:fn_one('${t.t_id}')">${t.t_id}</a></td>
+			<td> ${t.t_name} </td>
+			<td> ${t.mobile} </td>
+			<td> ${t.addr} </td>
+			</tr>
+			`;
+		}
+		var obj = document.querySelector('#my_tbody');
+		obj.innerHTML = html;
+	});
+}
+
+function fn_one(t_id){
+	axios.post('/ajax_teacher_one', {
+		t_id : t_id
+	})
+	.then(function (res) {
+		console.log(res.data.teacher);
+		var teacher = res.data.teacher;
+		var obj_t_id = document.querySelector("#t_id");
+		var obj_t_name = document.querySelector("#t_name");
+		var obj_mobile = document.querySelector("#mobile");
+		var obj_addr = document.querySelector("#addr");
+		
+		obj_t_id.value = teacher.t_id;
+		obj_t_name.value = teacher.t_name;
+		obj_mobile.value = teacher.mobile;
+		obj_addr.value = teacher.addr;
+	});
+}
+
+function fn_add(){
+// 	var t_id = document.querySelector("#t_id");
+	var t_name = document.querySelector("#t_name");
+	var mobile = document.querySelector("#mobile");
+	var addr = document.querySelector("#addr");
+	
+	axios.post('/ajax_teacher_add', {
+// 		t_id : t_id.value,
+		t_name : t_name.value,
+		mobile : mobile.value,
+		addr : addr.value
+	})
+	.then(function (res) {
+		var cnt = res.data.cnt;
+		console.log(cnt);
+		if(cnt==1){
+			alert("정상적으로 추가되었습니다.");
+			fn_list();
+			t_id.value ="";
+			t_name.value ="";
+			mobile.value = "";
+			addr.value = "";
+		}else{
+			alert("추가 도중 문제가 발생했습니다.");
+		}
+	});
+}
+
+function fn_modify(){
+	var t_id = document.querySelector("#t_id");
+	var t_name = document.querySelector("#t_name");
+	var mobile = document.querySelector("#mobile");
+	var addr = document.querySelector("#addr");
+	
+	axios.post('/ajax_teacher_modify', {
+		t_id : t_id.value,
+		t_name : t_name.value,
+		mobile : mobile.value,
+		addr : addr.value
+	})
+	.then(function (res) {
+		var cnt = res.data.cnt;
+		console.log(cnt);
+		if(cnt==1){
+			alert("정상적으로 수정되었습니다.");
+			fn_list();
+			t_id.value ="";
+			t_name.value ="";
+			mobile.value = "";
+			addr.value = "";
+		}else{
+			alert("수정 도중 문제가 발생했습니다.");
+		}
+	});
+}
+
+function fn_delete(){
+	var flag = confirm("한번 삭제한 데이터는 복구가 불가합니다. \n그래도 삭제하시겠습니까?")
+	if(!flag){
+		return;
+	}
+	var t_id = document.querySelector("#t_id");
+	var t_name = document.querySelector("#t_name");
+	var mobile = document.querySelector("#mobile");
+	var addr = document.querySelector("#addr");
+	console.log("t_id",t_id)
+	axios.post('/ajax_teacher_delete', {
+		t_id : t_id.value,
+	})
+	.then(function (res) {
+		var cnt = res.data.cnt;
+		console.log(cnt);
+		if(cnt==1){
+			alert("정상적으로 삭제되었습니다.");
+			fn_list();
+			t_id.value ="";
+			t_name.value ="";
+			mobile.value = "";
+			addr.value = "";
+		}else{
+			alert("삭제 도중 문제가 발생했습니다.");
+		}
+	});
+
+}
+	
+</script>
+</head>
+<body onload="fn_list()">
+
+<table border="1">
+	<thead>
+		<tr>
+			<td>사번</td>
+			<td>이름</td>
+			<td>전화</td>
+			<td>주소</td>
+		</tr>
+	</thead>
+	<tbody id="my_tbody">
+		<tr>
+			<td colspan="4">검색된 데이터가 없습니다.</td>
+		</tr>
+		
+	</tbody>
+</table>
+
+<table border="1">
+	<tr>
+		<td>사번</td>
+		<td><input type="text" name="t_id" id="t_id" /></td>
+	</tr>
+	<tr>
+		<td>이름</td>
+		<td><input type="text" name="t_name" id="t_name" /></td>
+	</tr>
+	<tr>
+		<td>전화</td>
+		<td><input type="text" name="mobile" id="mobile" /></td>
+	</tr>
+	<tr>
+		<td>주소</td>
+		<td><input type="text" name="addr" id="addr" /></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<input type="button" value="추가" onclick="fn_add()">
+			<input type="button" value="수정" onclick="fn_modify()">
+			<input type="button" value="삭제" onclick="fn_delete()">
+		</td>
+	</tr>
+</table>
+
+</body>
+</html>

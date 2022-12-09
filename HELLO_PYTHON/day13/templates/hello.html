@@ -15,13 +15,13 @@
 				var list = data.list;
 				var html = "";
 				for(var i=0; i < data.list.length;i++){
-					var e = list[i];
+					var s = list[i];
 					html += `
 					<tr>
-					<td><a href="javascript:fn_one('${e.s_id}')">${e.s_id}</a></td>
-					<td> ${e.s_name} </td>
-					<td> ${e.mobile} </td>
-					<td> ${e.address} </td>
+					<td><a href="javascript:fn_one('${e.s_id}')">${s.s_id}</a></td>
+					<td> ${s.s_name} </td>
+					<td> ${s.mobile} </td>
+					<td> ${s.address} </td>
 					</tr>
 					`;
 				}
